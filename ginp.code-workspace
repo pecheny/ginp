@@ -1,0 +1,20 @@
+{
+	"folders": [
+        {
+            "path": "."
+        },
+        {
+            "path": "..\\..\\Devs\\openfl"
+        },
+        {
+            "path": "..\\..\\Devs\\lime"
+        },
+        {
+            "path": "..\\taxis"
+        }
+    ],
+    "settings": {
+
+    "workbench.colorTheme": "Sublime Material Theme - Dark",
+    }
+}

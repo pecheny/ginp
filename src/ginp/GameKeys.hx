@@ -44,10 +44,12 @@ class GameKeys<T:Axis<T>> {
     }
 
     private function activateListener(ev:Event):Void {
+        reset();
         target.reset();
     }
 
     private function deactivateListener(ev:Event):Void {
+        reset();
         target.reset();
     }
 

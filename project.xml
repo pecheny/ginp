@@ -1,28 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-    <set name="builds_folder" value="."/>
+   <set name="builds_folder" value="."/>
    <set name="builds_folder" value="/AndroidBuilds" if="android"/>
 
-    <meta title="NEXT floor AGAIN" package="com.shoo.jam2023" version="1.0.0" company="pecheny"/>
-    <!-- <app main="j2023.Main3" path="${builds_folder}/Export" file="j2023"/> -->
-    <app main="InputTest" path="${builds_folder}/Export" file="j2023"/>
+    <meta title="Game buttons demo" package="com.shoo.ginp" version="1.0.0" company="pecheny"/>
+    <app main="InputTest" path="${builds_folder}/Export" file="demo"/>
 
     <window antialiasing="4"/>
-    <window background="#204080" fps="20" width="640" height="960"/>
-    <!--    <window background="#303030" fps="60"  if="html5"/>-->
+    <window background="#204080" fps="20" width="640" height="160"/>
     <source path="src"/>
 
     <haxelib name="openfl"/>
     <haxelib name="taxis"/>
-    <!-- <haxelib name="hxmath"/> -->
-
-    <!-- <haxelib name="hxcpp-debugger"/> -->
-    <!-- <haxedef name="openfl_disable_context_cache" value="true"/>
-    <haxedef name="openfl_always_render" value="true"/> -->
-<!--    <haxedef name="js-es" value="6"/>-->
-<!--    <haxedef name="openfl_pool_events" value="true"/>-->
     <haxeflag name="-dce" value="full"/>
-    <!-- <library path="Assets/art.swf" preload="true" generate="true"/> -->
     <assets path="Assets" include="*"/>
-    <template path="templates" if="html5"/>
 </project>

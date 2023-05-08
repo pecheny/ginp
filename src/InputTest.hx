@@ -20,15 +20,14 @@ import openfl.display.Sprite;
 }
 
 class InputTest extends AbstractEngine {
-    var buttons:GameButtons<TGButts>;
+    var buttons:GameButtonsImpl<TGButts>;
 
     public function new() {
         super();
         var wnd = openfl.Lib.application.window;
         if (wnd.y < 0)
             wnd.y = 20;
-        var gameButtons:GameButtons<TGButts> = new GameButtons(TGButts.aliases.length);
-        buttons = gameButtons;
+        buttons = new GameButtonsImpl(TGButts.aliases.length);
         var K = new GameKeys([
             Keyboard.A => TGButts.l,
             Keyboard.D => TGButts.r,
@@ -36,7 +35,7 @@ class InputTest extends AbstractEngine {
             Keyboard.LEFT => TGButts.l,
             Keyboard.RIGHT => TGButts.r,
             Keyboard.UP => TGButts.jump,
-        ], gameButtons);
+        ], buttons);
 
         var x = 20;
         var y = 20;

@@ -2,56 +2,50 @@ package ginp;
 
 import macros.AVConstructor;
 
-class GameButtons<T:Axis<T>> implements GameButtonsListener<T>{
-    var statesOdd:AVector<T, Bool>;
-    var statesEven:AVector<T, Bool>;
-    var states(get, never):AVector<T, Bool>;
-    var statesPrev(get, never):AVector<T, Bool>;
-    var odd = false;
+class GameButtonsImpl<T:Axis<T>> implements GameButtonsListener<T> implements GameButtons<T> {
+    var states:AVector<T, Int>;
+    var statesPrev:AVector<T, Int>;
 
     public function new(n:Int) {
-        statesOdd = AVConstructor.factoryCreate(T, (b:T) -> false, n);
-        statesEven = AVConstructor.factoryCreate(T, (b:T) -> false, n);
+        states = AVConstructor.factoryCreate(T, (b:T) -> 0, n);
+        statesPrev = AVConstructor.factoryCreate(T, (b:T) -> 0, n);
     }
 
     public function justPressed(button:T):Bool {
-        return states[button] && !statesPrev[button];
+        return states[button] > 0 && statesPrev[button] == 0;
     }
 
     public function pressed(button:T):Bool {
-        return states[button];
+        return states[button] > 0;
     }
 
     public function frameDone() {
-        // odd = !odd;
         for (b in states.axes())
             statesPrev[b] = states[b];
-    
     }
+
     public function onButtonUp(b:T) {
-        states[b] = false;
+        states[b] = Std.int(Math.max(0, states[b] - 1));
     }
 
     public function onButtonDown(b:T) {
-        states[b] = true;
+        states[b]++;
     }
 
-	function get_states():AVector<T, Bool> {
-        return if (odd) statesOdd else statesEven;
-	}
-
-	function get_statesPrev():AVector<T, Bool> {
-        return if (!odd) statesOdd else statesEven;
-	}
-
-	public function reset() {}
+    public function reset() {
+        for (b in states.axes()) {
+            states[b] = 0;
+            statesPrev[b] = 0;
+        }
+    }
 }
 
-// interface GameButtons<T:Axis<T>> {
-//     public function justPressed(button:T):Bool;
+interface GameButtons<T:Axis<T>> {
+    public function justPressed(button:T):Bool;
 
-//     public function pressed(button:T):Bool;
-// }
+    public function pressed(button:T):Bool;
+}
+
 interface GameButtonsListener<T:Axis<T>> {
     public function frameDone():Void;
 

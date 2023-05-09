@@ -27,8 +27,9 @@ class InputTest extends AbstractEngine {
         var wnd = openfl.Lib.application.window;
         if (wnd.y < 0)
             wnd.y = 20;
+        var oflkbd = new OflKbd();
         buttons = new GameButtonsImpl(TGButts.aliases.length);
-        var K = new GameKeys([
+        var k = new GameKeys([
             Keyboard.A => TGButts.l,
             Keyboard.D => TGButts.r,
             Keyboard.SPACE => TGButts.jump,
@@ -37,6 +38,7 @@ class InputTest extends AbstractEngine {
             Keyboard.UP => TGButts.jump,
         ], buttons);
 
+        oflkbd.addListener(k);
         var x = 20;
         var y = 20;
         createButtonVeiw(TGButts.l, x+=40, y);

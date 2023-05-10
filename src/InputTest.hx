@@ -1,4 +1,5 @@
 package;
+import ginp.GameAxes;
 import openfl.ui.Keyboard;
 import ginp.GameKeys;
 import ginp.GameButtons;
@@ -21,6 +22,7 @@ import openfl.display.Sprite;
 
 class InputTest extends AbstractEngine {
     var buttons:GameButtonsImpl<TGButts>;
+    var axes:GameAxes<TGAxis>;
 
     public function new() {
         super();
@@ -44,6 +46,28 @@ class InputTest extends AbstractEngine {
         createButtonVeiw(TGButts.l, x+=40, y);
         createButtonVeiw(TGButts.jump, x+=40, y);
         createButtonVeiw(TGButts.r, x+=40, y);
+
+        var faxes:FakeAxis<TGAxis> = new FakeAxis([
+            Keyboard.J,
+            Keyboard.L,
+            Keyboard.K,
+            Keyboard.I,
+        ], TGAxis.aliases.length);
+        oflkbd.addListener(faxes);
+        axes = faxes;
+        y+=40;
+        x = 20;
+        createAxisView(TGAxis.h, x, y+=40);
+        createAxisView(TGAxis.v, x, y+=40);
+
+    }
+
+    function createAxisView(a, x, y) {
+        var av  = new AxisView(axes, a);
+        av.x = x;
+        av.y = y;
+        addChild(av);
+        addUpdatable(av);
     }
 
     function createButtonVeiw(b, x, y) {
@@ -79,25 +103,25 @@ class GButtonView<B:Axis<B>> implements Updatable extends Sprite {
     }
 }
 
-// class AxisView<A:Axis<A>> implements Updatable extends Sprite {
-//     var input:GameAxes<A>;
-//     var axis:A;
+class AxisView<A:Axis<A>> implements Updatable extends Sprite {
+    var input:GameAxes<A>;
+    var axis:A;
 
-//     public function new(i, a) {
-//         super();
-//         this.axis = a;
-//         this.input = i;
-//     }
+    public function new(i, a) {
+        super();
+        this.axis = a;
+        this.input = i;
+    }
 
-//     public function update(dt) {
-//         graphics.clear();
-//         var w = 100;
-//         graphics.beginFill(0);
-//         graphics.drawRect(0, 0, w, 2);
-//         var mw = 4;
-//         graphics.beginFill(0xff0000);
-//         var pos = input.getDirProjection(axis) / 2 * w + w / 2;
-//         graphics.drawRect(pos - mw / 2, 0, mw, 8);
-//         graphics.endFill();
-//     }
-// }
+    public function update(dt) {
+        graphics.clear();
+        var w = 100;
+        graphics.beginFill(0);
+        graphics.drawRect(0, 0, w, 2);
+        var mw = 4;
+        graphics.beginFill(0xff0000);
+        var pos = input.getDirProjection(axis) / 2 * w + w / 2;
+        graphics.drawRect(pos - mw / 2, 0, mw, 8);
+        graphics.endFill();
+    }
+}

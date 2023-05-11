@@ -10,6 +10,25 @@ interface GameAxes<T:Axis<T>> {
     function getDirProjection(axis:T):Float;
 }
 
+class GameAxesSummator<T:Axis<T>> implements GameAxes<T> {
+    var children:Array<GameAxes<T>> = [];
+
+    public function new() {}
+
+    public function addChild(ga) {
+        children.push(ga);
+    }
+
+    public function getDirProjection(axis:T):Float {
+        var val = 0.;
+        for (ga in children) {
+            if(Math.abs(ga.getDirProjection(axis)) > Math.abs(val))
+                val = ga.getDirProjection(axis);
+        }
+        return val;
+    }
+}
+
 /**
     Gamepad axes emulation with keyboard. THe first arg is array of keys 
     which are pairs for negative-positive directions of each axis.

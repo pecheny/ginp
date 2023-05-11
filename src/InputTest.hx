@@ -24,7 +24,7 @@ import openfl.display.Sprite;
 
 class InputTest extends AbstractEngine {
     var buttons:GameButtonsImpl<TGButts>;
-    var axes:GameAxes<TGAxis>;
+    // var axes:GameAxes<TGAxis>;
 
     public function new() {
         super();
@@ -56,11 +56,10 @@ class InputTest extends AbstractEngine {
             Keyboard.I,
         ], TGAxis.aliases.length);
         oflkbd.addListener(faxes);
-        axes = faxes;
         y+=40;
         x = 20;
-        createAxisView(axes, TGAxis.h, x, y+=40);
-        createAxisView(axes, TGAxis.v, x, y+=40);
+        createAxisView(faxes, TGAxis.h, x, y+=40);
+        createAxisView(faxes, TGAxis.v, x, y+=40);
 
         y-=80; x+=140;
 
@@ -70,6 +69,13 @@ class InputTest extends AbstractEngine {
 
         createAxisView(stick.stick, TGAxis.h, x, y+=40);
         createAxisView(stick.stick, TGAxis.v, x, y+=40);
+
+        y-=80; x+=140;
+        var axes = new GameAxesSummator();
+        axes.addChild(stick.stick);
+        axes.addChild(faxes);
+        createAxisView(axes, TGAxis.h, x, y+=40);
+        createAxisView(axes, TGAxis.v, x, y+=40);
     }
 
     function createAxisView(axes, a, x, y) {

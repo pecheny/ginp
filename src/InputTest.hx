@@ -1,4 +1,6 @@
 package;
+import macros.AVConstructor;
+import ginp.OnScreenStick.DummyOflStickAdapter;
 import ginp.GameAxes;
 import openfl.ui.Keyboard;
 import ginp.GameKeys;
@@ -57,12 +59,20 @@ class InputTest extends AbstractEngine {
         axes = faxes;
         y+=40;
         x = 20;
-        createAxisView(TGAxis.h, x, y+=40);
-        createAxisView(TGAxis.v, x, y+=40);
+        createAxisView(axes, TGAxis.h, x, y+=40);
+        createAxisView(axes, TGAxis.v, x, y+=40);
 
+        y-=80; x+=140;
+
+        var stick = new DummyOflStickAdapter(AVConstructor.create(TGAxis, h, v));
+        addChild(stick);
+        addUpdatable(stick);
+
+        createAxisView(stick.stick, TGAxis.h, x, y+=40);
+        createAxisView(stick.stick, TGAxis.v, x, y+=40);
     }
 
-    function createAxisView(a, x, y) {
+    function createAxisView(axes, a, x, y) {
         var av  = new AxisView(axes, a);
         av.x = x;
         av.y = y;

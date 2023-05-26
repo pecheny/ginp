@@ -1,4 +1,5 @@
 package;
+import ginp.OnScreenStick.AxisMapper;
 import macros.AVConstructor;
 import ginp.OnScreenStick.DummyOflStickAdapter;
 import ginp.GameAxes;
@@ -31,7 +32,6 @@ class InputTest extends AbstractEngine {
         var wnd = openfl.Lib.application.window;
         if (wnd.y < 0)
             wnd.y = 20;
-        var oflkbd = new OflKbd();
         buttons = new GameButtonsImpl(TGButts.aliases.length);
         var k = new GameKeys([
             Keyboard.A => TGButts.l,
@@ -42,7 +42,9 @@ class InputTest extends AbstractEngine {
             Keyboard.UP => TGButts.jump,
         ], buttons);
 
+        var oflkbd = new OflKbd();
         oflkbd.addListener(k);
+
         var x = 20;
         var y = 20;
         createButtonVeiw(TGButts.l, x+=40, y);
@@ -63,16 +65,17 @@ class InputTest extends AbstractEngine {
 
         y-=80; x+=140;
 
-        var stick = new DummyOflStickAdapter(AVConstructor.create(TGAxis, h, v));
+        var stick = new DummyOflStickAdapter();
         addChild(stick);
         addUpdatable(stick);
 
-        createAxisView(stick.stick, TGAxis.h, x, y+=40);
-        createAxisView(stick.stick, TGAxis.v, x, y+=40);
+        var mapper = AxisMapper.empty( stick.stick, TGAxis.aliases.length).withMapped(Axis2D.horizontal, TGAxis.h).withMapped(Axis2D.vertical, TGAxis.v);
+        createAxisView(mapper, TGAxis.h, x, y+=40);
+        createAxisView(mapper, TGAxis.v, x, y+=40);
 
         y-=80; x+=140;
         var axes = new GameAxesSummator();
-        axes.addChild(stick.stick);
+        axes.addChild(mapper);
         axes.addChild(faxes);
         createAxisView(axes, TGAxis.h, x, y+=40);
         createAxisView(axes, TGAxis.v, x, y+=40);

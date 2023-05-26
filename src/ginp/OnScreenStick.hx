@@ -1,23 +1,62 @@
 package ginp;
 
+import macros.AVConstructor;
 import haxe.ds.Vector;
 import utils.Updatable;
 import openfl.Lib;
 import openfl.events.MouseEvent;
 import openfl.display.Sprite;
-import Axis2D.AVector2D;
+import Axis2D;
 
-class OnScreenStick<T:Axis<T>> implements GameAxes<T> {
-    var axesMapping:AVector2D<T>;
+class AxisMapper<TIn:Axis<TIn>, TOut:Axis<TOut>> implements GameAxes<TOut> {
+    var axesMapping:AVector<TOut, TIn>;
+    var sources:GameAxes<TIn>;
 
+    function new(s) {
+        this.sources = s;
+    }
+
+    public function withMapped(from:TIn, to:TOut) {
+        if (axesMapping[to] != -1)
+            throw "Already has mapping for " + to;
+        axesMapping[to] = from;
+        return this;
+    }
+
+    public function getDirProjection(axis:TOut):Float {
+        var trgAxis = axesMapping[axis];
+        if(trgAxis != -1)
+            return sources.getDirProjection(trgAxis);
+        // var myAxis = -1;
+        // for (a in axesMapping.axes())
+        //     if (axesMapping[a] == axis)
+        //         myAxis = a;
+        // if (myAxis == -1)
+        //     return 0.;
+        // return pos[cast myAxis] / r;
+        return 0.;
+    }
+
+    public static function empty<TIn:Axis<TIn>, TOut:Axis<TOut>>(s:GameAxes<TIn>,numOutAxes:Int):AxisMapper<TIn, TOut> {
+        var am = new AxisMapper<TIn, TOut>(s);
+        am.axesMapping = AVConstructor.factoryCreate(TOut, _ -> cast -1, numOutAxes);
+        return am;
+    }
+
+    public static function fromMapping<TIn:Axis<TIn>, TOut:Axis<TOut>>(s:GameAxes<TIn>,mapping:AVector<TOut, TIn>):AxisMapper<TIn, TOut> {
+        var am = new AxisMapper<TIn, TOut>(s);
+        am.axesMapping = mapping;
+        return am;
+    }
+}
+
+class OnScreenStick implements GameAxes<Axis2D> {
     public var origin:Vector2D<Float> = new Vector2D();
     public var pos:Vector2D<Float> = new Vector2D();
 
     public var r:Float = 60;
 
-    public function new(m) {
-        axesMapping = m;
-    }
+    public function new() {}
 
     public function setPos(x, y) {
         pos.init(x, y);
@@ -30,25 +69,19 @@ class OnScreenStick<T:Axis<T>> implements GameAxes<T> {
         origin.init(x, y);
     }
 
-    public function getDirProjection(axis:T):Float {
-        var myAxis = -1;
-        for (a in axesMapping.axes())
-            if (axesMapping[a] == axis)
-                myAxis = a;
-        if (myAxis == -1)
-            return 0.;
-        return pos[cast myAxis] / r;
+    public function getDirProjection(axis:Axis2D):Float {
+        return pos[axis] / r;
     }
 }
 
 class DummyOflStickAdapter<T:Axis<T>> extends Sprite implements Updatable {
-    public var stick(default, null):OnScreenStick<T>;
+    public var stick(default, null):OnScreenStick;
 
     var active = false;
 
-    public function new(mapping) {
+    public function new() {
         super();
-        stick = new OnScreenStick(mapping);
+        stick = new OnScreenStick();
         Lib.current.stage.addEventListener(MouseEvent.MOUSE_DOWN, onDown);
         Lib.current.stage.addEventListener(MouseEvent.MOUSE_UP, onUp);
     }

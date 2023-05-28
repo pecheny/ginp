@@ -1,9 +1,8 @@
 package ginp;
 
+import ginp.api.KbdListener;
 import haxe.ds.Vector;
 import haxe.ds.ReadOnlyArray;
-import ginp.GameKeys.KeyCode;
-import ginp.GameKeys.KbdListener;
 import ginp.GameButtons.GameButtonsListener;
 
 interface GameAxes<T:Axis<T>> {

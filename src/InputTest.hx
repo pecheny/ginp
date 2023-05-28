@@ -33,15 +33,14 @@ class InputTest extends AbstractEngine {
         var wnd = openfl.Lib.application.window;
         if (wnd.y < 0)
             wnd.y = 20;
-        buttons = new GameButtonsImpl(TGButts.aliases.length);
-        var k = new GameKeys([
+        var k = new GameKeys(buttons, [
             Keyboard.A => TGButts.l,
             Keyboard.D => TGButts.r,
             Keyboard.SPACE => TGButts.jump,
             Keyboard.LEFT => TGButts.l,
             Keyboard.RIGHT => TGButts.r,
             Keyboard.UP => TGButts.jump,
-        ], buttons);
+        ]);
 
         var oflkbd = new OflKbd();
         oflkbd.addListener(k);

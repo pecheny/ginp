@@ -1,5 +1,6 @@
 package ginp;
 
+import utils.Signal;
 import macros.AVConstructor;
 import haxe.ds.Vector;
 import utils.Updatable;
@@ -25,7 +26,7 @@ class AxisMapper<TIn:Axis<TIn>, TOut:Axis<TOut>> implements GameAxes<TOut> {
 
     public function getDirProjection(axis:TOut):Float {
         var trgAxis = axesMapping[axis];
-        if(trgAxis != -1)
+        if (trgAxis != -1)
             return sources.getDirProjection(trgAxis);
         // var myAxis = -1;
         // for (a in axesMapping.axes())
@@ -37,24 +38,25 @@ class AxisMapper<TIn:Axis<TIn>, TOut:Axis<TOut>> implements GameAxes<TOut> {
         return 0.;
     }
 
-    public static function empty<TIn:Axis<TIn>, TOut:Axis<TOut>>(s:GameAxes<TIn>,numOutAxes:Int):AxisMapper<TIn, TOut> {
+    public static function empty<TIn:Axis<TIn>, TOut:Axis<TOut>>(s:GameAxes<TIn>, numOutAxes:Int):AxisMapper<TIn, TOut> {
         var am = new AxisMapper<TIn, TOut>(s);
         am.axesMapping = AVConstructor.factoryCreate(TOut, _ -> cast -1, numOutAxes);
         return am;
     }
 
-    public static function fromMapping<TIn:Axis<TIn>, TOut:Axis<TOut>>(s:GameAxes<TIn>,mapping:AVector<TOut, TIn>):AxisMapper<TIn, TOut> {
+    public static function fromMapping<TIn:Axis<TIn>, TOut:Axis<TOut>>(s:GameAxes<TIn>, mapping:AVector<TOut, TIn>):AxisMapper<TIn, TOut> {
         var am = new AxisMapper<TIn, TOut>(s);
         am.axesMapping = mapping;
         return am;
     }
 }
 
-class OnScreenStick implements GameAxes<Axis2D> {
+class OnScreenStick implements GameAxes<Axis2D> implements AxisDispatcher<Axis2D> {
     public var origin:Vector2D<Float> = new Vector2D();
     public var pos:Vector2D<Float> = new Vector2D();
 
     public var r:Float = 60;
+    public var axisMoved:Signal<(Axis2D, Float) -> Void> = new Signal();
 
     public function new() {}
 
@@ -63,6 +65,8 @@ class OnScreenStick implements GameAxes<Axis2D> {
         pos.remove(origin);
         if (pos.lenSq() > r * r)
             pos.normalize(r);
+        axisMoved.dispatch(horizontal, pos[horizontal] / r);
+        axisMoved.dispatch(vertical, pos[vertical] / r);
     }
 
     public function setOrigin(x, y) {

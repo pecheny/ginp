@@ -1,4 +1,5 @@
 package;
+import ginp.AxisToButton;
 import ginp.OnScreenStick.AxisMapper;
 import macros.AVConstructor;
 import ginp.OnScreenStick.DummyOflStickAdapter;
@@ -79,6 +80,10 @@ class InputTest extends AbstractEngine {
         axes.addChild(faxes);
         createAxisView(axes, TGAxis.h, x, y+=40);
         createAxisView(axes, TGAxis.v, x, y+=40);
+
+        var axis2button = new AxisToButton(Axis2D.aliases.length, stick.stick, buttons)
+        .withMapped(TGButts.jump, vertical, 1);
+
     }
 
     function createAxisView(axes, a, x, y) {

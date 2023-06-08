@@ -1,21 +1,14 @@
 package;
 
-import ginp.AxisDispatcher;
-import ginp.OnScreenStick;
-import openfl.Lib;
-import openfl.OflKbd;
-import ginp.api.KbdListener.KeyCode;
 import ginp.AxisToButton;
-import ginp.OnScreenStick.AxisMapper;
-import macros.AVConstructor;
-import ginp.OnScreenStick.DummyOflStickAdapter;
 import ginp.GameAxes;
-import openfl.ui.Keyboard;
-import ginp.GameKeys;
 import ginp.GameButtons;
+import ginp.GameInput;
+import ginp.OnScreenStick;
+import openfl.display.Sprite;
+import openfl.ui.Keyboard;
 import utils.AbstractEngine;
 import utils.Updatable;
-import openfl.display.Sprite;
 
 @:build(macros.BuildMacro.buildAxes())
 @:enum abstract TGAxis(Axis<TGAxis>) to Axis<TGAxis> {
@@ -30,76 +23,7 @@ import openfl.display.Sprite;
     var r;
 }
 
-class GameInput<TAxis:Axis<TAxis>, TButton:Axis<TButton>> {
-    var _buttons:GameButtonsImpl<TButton>;
-
-    public var buttons(get, null):GameButtons<TButton>;
-
-    var axisCount:Int;
-    var _axes = new GameAxesSummator<TAxis>();
-
-    public var axes(get, null):GameAxes<TAxis>;
-
-    var updateBefore:Array<Updatable> = [];
-
-    var oflkbd = new OflKbd();
-
-    public function new(buttonsCount, axisCount) {
-        _buttons = new GameButtonsImpl(buttonsCount);
-        this.axisCount = axisCount;
-    }
-
-    public function createKeyMapping(map:Map<KeyCode, TButton>) {
-        var k = new GameKeys(_buttons, map);
-
-        oflkbd.addListener(k);
-    }
-
-    public function beforeUpdate(dt) {
-        for (u in updateBefore)
-            u.update(dt);
-    }
-
-    public function afterUpdate() {
-        _buttons.frameDone();
-    }
-
-    function get_buttons():GameButtons<TButton> {
-        return _buttons;
-    }
-
-    function get_axes():GameAxes<TAxis> {
-        return _axes;
-    }
-
-    public function createStick() {
-        var stick = new OnScreenStick();
-        var adapter = new DummyOflStickAdapter(stick);
-        var rend = new DummyOflStickRenderer(stick);
-        Lib.current.stage.addChild(rend);
-        updateBefore.push(adapter);
-        updateBefore.push(rend);
-        return stick;
-    }
-    public function addFakeAxis(keys) {
-        var faxes:FakeAxis<TGAxis> = new FakeAxis(keys, axisCount);
-        oflkbd.addListener(faxes);
-        return faxes;
-    }
-
-    public function mapAxisSource<TIn:Axis<TIn>>(stick):AxisMapper<TIn, TAxis> {
-        var mapper = AxisMapper.empty(stick, axisCount);
-        addAxisSource(mapper);
-        return mapper;
-    }
-
-    public function addAxisSource(a) {
-        _axes.addChild(a);
-    }
-}
-
 class InputTest extends AbstractEngine {
-    // var axes:GameAxes<TGAxis>;
     var input:GameInput<TGAxis, TGButts>;
 
     public function new() {
@@ -117,13 +41,23 @@ class InputTest extends AbstractEngine {
             Keyboard.UP => TGButts.jump,
         ]);
 
+        var faxes = input.addFakeAxis([Keyboard.J, Keyboard.L, Keyboard.K, Keyboard.I,]);
+
+        var stick = input.createStick();
+        var mapper = input.mapAxisSource(stick).withMapped(Axis2D.horizontal, TGAxis.h).withMapped(Axis2D.vertical, TGAxis.v);
+
+        var a2b = new AxisToButton<Axis2D, TGButts>(Axis2D.aliases.length, stick, @:privateAccess input._buttons);
+
+        var rend = new DummyOflStickRenderer(stick);
+        addUpdatable(rend);
+        addChild(rend);
+
         var x = 20;
         var y = 20;
         createButtonVeiw(TGButts.l, x += 40, y);
         createButtonVeiw(TGButts.jump, x += 40, y);
         createButtonVeiw(TGButts.r, x += 40, y);
 
-        var faxes = input.addFakeAxis([Keyboard.J, Keyboard.L, Keyboard.K, Keyboard.I,]);
         y += 40;
         x = 20;
         createAxisView(faxes, TGAxis.h, x, y += 40);
@@ -132,8 +66,6 @@ class InputTest extends AbstractEngine {
         y -= 80;
         x += 140;
 
-        var stick:AxisDispatcher<Axis2D> = input.createStick();
-        var mapper = input.mapAxisSource(cast stick).withMapped(Axis2D.horizontal, TGAxis.h).withMapped(Axis2D.vertical, TGAxis.v);
         createAxisView(mapper, TGAxis.h, x, y += 40);
         createAxisView(mapper, TGAxis.v, x, y += 40);
 
@@ -141,8 +73,6 @@ class InputTest extends AbstractEngine {
         x += 140;
         createAxisView(input.axes, TGAxis.h, x, y += 40);
         createAxisView(input.axes, TGAxis.v, x, y += 40);
-
-        var a2b = new AxisToButton<Axis2D, TGButts>(Axis2D.aliases.length, stick, cast input.buttons);
     }
 
     function createAxisView(axes, a, x, y) {

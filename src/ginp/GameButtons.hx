@@ -2,6 +2,12 @@ package ginp;
 
 import macros.AVConstructor;
 
+/**
+    Provides ```pressed(b)```, ```justPressed(b)``` api according to number of ```onButtonUp(b)```,
+    ```onButtonDown(b)``` called in current frame.
+    Useful to combine several event sources (i.e. keyboard, gamepad, touchscreen and so on).
+    Each source should not call ```onButtonDown(b)``` second time before ```onButtonUp(b)``` for given ```b```.
+**/
 class GameButtonsImpl<T:Axis<T>> implements GameButtonsListener<T> implements GameButtons<T> {
     var states:AVector<T, Int>;
     var statesPrev:AVector<T, Int>;

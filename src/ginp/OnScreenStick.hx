@@ -28,13 +28,6 @@ class AxisMapper<TIn:Axis<TIn>, TOut:Axis<TOut>> implements GameAxes<TOut> {
         var trgAxis = axesMapping[axis];
         if (trgAxis != -1)
             return sources.getDirProjection(trgAxis);
-        // var myAxis = -1;
-        // for (a in axesMapping.axes())
-        //     if (axesMapping[a] == axis)
-        //         myAxis = a;
-        // if (myAxis == -1)
-        //     return 0.;
-        // return pos[cast myAxis] / r;
         return 0.;
     }
 
@@ -76,43 +69,64 @@ class OnScreenStick implements GameAxes<Axis2D> implements AxisDispatcher<Axis2D
     public function getDirProjection(axis:Axis2D):Float {
         return pos[axis] / r;
     }
-}
 
-class DummyOflStickAdapter<T:Axis<T>> extends Sprite implements Updatable {
-    public var stick(default, null):OnScreenStick;
+    public var active(default, null) = false;
 
-    var active = false;
-
-    public function new() {
-        super();
-        stick = new OnScreenStick();
-        Lib.current.stage.addEventListener(MouseEvent.MOUSE_DOWN, onDown);
-        Lib.current.stage.addEventListener(MouseEvent.MOUSE_UP, onUp);
-    }
-
-    function onDown(e:MouseEvent) {
-        stick.setOrigin(mouseX, mouseY);
-        stick.setPos(mouseX, mouseY);
+    public function onDown(mouseX, mouseY) {
+        setOrigin(mouseX, mouseY);
+        setPos(mouseX, mouseY);
         active = true;
     }
 
-    function onUp(e:MouseEvent) {
-        stick.setOrigin(0, 0);
-        stick.setPos(0, 0);
+    public function onUp() {
+        setOrigin(0, 0);
+        setPos(0, 0);
         active = false;
+    }
+}
+
+class DummyOflStickRenderer extends Sprite implements Updatable {
+    var stick:OnScreenStick;
+
+    public function new(s) {
+        super();
+        this.stick = s;
     }
 
     public function update(dt) {
         graphics.clear();
-        if (!active)
+        if (!stick.active)
             return;
-        stick.setPos(mouseX, mouseY);
         graphics.beginFill(0xffffff, 0.3);
         graphics.drawCircle(stick.origin.x, stick.origin.y, stick.r);
         graphics.endFill();
         graphics.beginFill(0x202020, 0.6);
         graphics.drawCircle(stick.origin.x + stick.pos.x, stick.origin.y + stick.pos.y, 5);
         graphics.endFill();
+    }
+}
+
+class DummyOflStickAdapter<T:Axis<T>> implements Updatable {
+    var stick:OnScreenStick;
+
+    public function new(s) {
+        this.stick = s;
+        Lib.current.stage.addEventListener(MouseEvent.MOUSE_DOWN, onDown);
+        Lib.current.stage.addEventListener(MouseEvent.MOUSE_UP, onUp);
+    }
+
+    function onDown(e:MouseEvent) {
+        stick.onDown(Lib.current.stage.mouseX, Lib.current.stage.mouseY);
+    }
+
+    function onUp(e:MouseEvent) {
+        stick.onUp();
+    }
+
+    public function update(dt) {
+        if (!stick.active)
+            return;
+        stick.setPos(Lib.current.stage.mouseX, Lib.current.stage.mouseY);
     }
 }
 

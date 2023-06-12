@@ -57,7 +57,7 @@ class GameInput<TAxis:Axis<TAxis>, TButton:Axis<TButton>> {
         return stick;
     }
 
-    public function addFakeAxis(keys) {
+    public function addFakeAxis(keys):FakeAxis<TAxis> {
         var faxes = new FakeAxis(keys, axisCount);
         oflkbd.addListener(faxes);
         return faxes;

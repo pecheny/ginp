@@ -31,7 +31,7 @@ class InputTest extends AbstractEngine {
         var wnd = openfl.Lib.application.window;
         if (wnd.y < 0)
             wnd.y = 20;
-        input = new GameInput(TGButts.aliases.length, TGAxis.aliases.length);
+        input = new GameInput( TGAxis.aliases.length, TGButts.aliases.length);
         input.createKeyMapping([
             Keyboard.A => TGButts.l,
             Keyboard.D => TGButts.r,

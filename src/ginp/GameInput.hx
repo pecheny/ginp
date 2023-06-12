@@ -22,7 +22,7 @@ class GameInput<TAxis:Axis<TAxis>, TButton:Axis<TButton>> {
 
     var oflkbd = new OflKbd();
 
-    public function new(buttonsCount, axisCount) {
+    public function new(axisCount, buttonsCount) {
         _buttons = new GameButtonsImpl(buttonsCount);
         this.axisCount = axisCount;
     }

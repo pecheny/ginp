@@ -8,7 +8,12 @@ import ginp.api.KbdListener.KeyCode;
 import openfl.OflKbd;
 import utils.Updatable;
 
-class GameInput<TAxis:Axis<TAxis>, TButton:Axis<TButton>> {
+interface GameInputUpdater {
+    public function beforeUpdate(dt:Float):Void;
+    public function afterUpdate():Void;
+}
+
+class GameInput<TAxis:Axis<TAxis>, TButton:Axis<TButton>> implements GameInputUpdater {
     var _buttons:GameButtonsImpl<TButton>;
 
     public var buttons(get, null):GameButtons<TButton>;

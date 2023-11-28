@@ -17,6 +17,7 @@ class GameInput<TAxis:Axis<TAxis>, TButton:Axis<TButton>> implements GameInputUp
     var _buttons:GameButtonsImpl<TButton>;
 
     public var buttons(get, null):GameButtons<TButton>;
+    public var buttonListener(get, null):GameButtonsListener<TButton>;
 
     var axisCount:Int;
     var _axes = new GameAxesSummator<TAxis>();
@@ -34,7 +35,6 @@ class GameInput<TAxis:Axis<TAxis>, TButton:Axis<TButton>> implements GameInputUp
 
     public function createKeyMapping(map:Map<KeyCode, TButton>) {
         var k = new GameKeys(_buttons, map);
-
         oflkbd.addListener(k);
     }
 
@@ -48,6 +48,10 @@ class GameInput<TAxis:Axis<TAxis>, TButton:Axis<TButton>> implements GameInputUp
     }
 
     function get_buttons():GameButtons<TButton> {
+        return _buttons;
+    }
+
+    function get_buttonListener() {
         return _buttons;
     }
 

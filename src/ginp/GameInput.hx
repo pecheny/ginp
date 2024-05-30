@@ -6,7 +6,7 @@ import ginp.GameKeys;
 import ginp.OnScreenStick;
 import ginp.api.KbdListener.KeyCode;
 import openfl.OflKbd;
-import utils.Updatable;
+import update.Updatable;
 
 interface GameInputUpdater {
     public function beforeUpdate(dt:Float):Void;

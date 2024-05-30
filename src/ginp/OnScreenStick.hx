@@ -3,7 +3,7 @@ package ginp;
 import utils.Signal;
 import macros.AVConstructor;
 import haxe.ds.Vector;
-import utils.Updatable;
+import update.Updatable;
 import openfl.Lib;
 import openfl.events.MouseEvent;
 import openfl.display.Sprite;

@@ -8,7 +8,7 @@ import ginp.Keyboard;
 import ginp.OnScreenStick;
 import openfl.display.Sprite;
 import utils.AbstractEngine;
-import utils.Updatable;
+import update.Updatable;
 
 @:build(macros.BuildMacro.buildAxes())
 @:enum abstract TGAxis(Axis<TGAxis>) to Axis<TGAxis> {
@@ -43,6 +43,7 @@ class InputTest extends AbstractEngine {
 
         var faxes = input.addFakeAxis([Keyboard.J, Keyboard.L, Keyboard.K, Keyboard.I,]);
 
+        input.addAxisSource(faxes);
         var stick = input.createStick();
         var mapper = input.mapAxisSource(stick).withMapped(Axis2D.horizontal, TGAxis.h).withMapped(Axis2D.vertical, TGAxis.v);
 

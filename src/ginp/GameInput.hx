@@ -59,11 +59,8 @@ class GameInput<TAxis:Axis<TAxis>, TButton:Axis<TButton>> implements GameInputUp
         return _axes;
     }
 
-    public function createStick() {
-        var stick = new OnScreenStick();
-        var adapter = new DummyOflStickAdapter(stick);
-        updateBefore.push(adapter);
-        return stick;
+    public function addEarlyUpdatable(u) {
+        updateBefore.push(u);
     }
 
     public function addFakeAxis(keys):FakeAxis<TAxis> {

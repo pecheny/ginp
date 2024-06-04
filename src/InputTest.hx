@@ -44,7 +44,11 @@ class InputTest extends AbstractEngine {
         var faxes = input.addFakeAxis([Keyboard.J, Keyboard.L, Keyboard.K, Keyboard.I,]);
 
         input.addAxisSource(faxes);
-        var stick = input.createStick();
+
+        var stick = new OnScreenStick();
+        var adapter = new DummyOflStickAdapter(stick);
+        input.addEarlyUpdatable(adapter);
+
         var mapper = input.mapAxisSource(stick).withMapped(Axis2D.horizontal, TGAxis.h).withMapped(Axis2D.vertical, TGAxis.v);
 
         var a2b = new AxisToButton<Axis2D, TGButts>(Axis2D.aliases.length, stick, @:privateAccess input._buttons);

@@ -45,7 +45,7 @@ class InputTest extends AbstractEngine {
 
         input.addAxisSource(faxes);
 
-        var stick = new OnScreenStick();
+        var stick = new OnScreenStick(60);
         var adapter = new DummyOflStickAdapter(stick);
         input.addEarlyUpdatable(adapter);
 

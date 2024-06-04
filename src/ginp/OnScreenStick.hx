@@ -51,7 +51,9 @@ class OnScreenStick implements GameAxes<Axis2D> implements AxisDispatcher<Axis2D
     public var r:Float = 60;
     public var axisMoved:Signal<(Axis2D, Float) -> Void> = new Signal();
 
-    public function new() {}
+    public function new(r) {
+        this.r = r;
+    }
 
     public function setPos(x, y) {
         pos.init(x, y);

@@ -14,7 +14,7 @@ class OneButton2DAxisInput  extends GameInput<Axis2D, OneButton> implements Game
     }
 
     function createStick() {
-        var stick = new OnScreenStick();
+        var stick = new OnScreenStick(60);
         var adapter = new DummyOflStickAdapter(stick);
         addEarlyUpdatable(adapter);
         addAxisSource(stick);

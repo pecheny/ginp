@@ -1,5 +1,6 @@
 package ginp;
 
+import hxmath.math.MathUtil;
 import Axis2D;
 import hxmath.math.Vector2;
 import utils.Signal;
@@ -50,4 +51,34 @@ class OnScreenStick implements GameAxes<Axis2D> implements AxisDispatcher<Axis2D
         active = false;
         onActiveToggle.dispatch(active);
     }
+}
+
+class CircularStick extends OnScreenStick {
+
+    override function setPos(x:Float, y:Float) {
+        if (!active)
+            return;
+        pos.set(x, y);
+        pos.subtractWith(origin);
+        if (pos.lengthSq > r * r)
+            pos.normalizeTo(r);
+        axisMoved.dispatch(horizontal, pos[horizontal] / r);
+        axisMoved.dispatch(vertical, pos[vertical] / r);
+    }
+    
+}
+
+class SquareStick extends OnScreenStick {
+
+    override function setPos(x:Float, y:Float) {
+        if (!active)
+            return;
+        pos.set(x, y);
+        pos.subtractWith(origin);
+        for (a in Axis2D)
+            pos[a] = MathUtil.clamp(pos[a], -r, r);
+        axisMoved.dispatch(horizontal, pos[horizontal] / r);
+        axisMoved.dispatch(vertical, pos[vertical] / r);
+    }
+    
 }

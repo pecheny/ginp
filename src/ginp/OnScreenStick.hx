@@ -1,48 +1,10 @@
 package ginp;
 
-import utils.Signal;
-import macros.AVConstructor;
-import haxe.ds.Vector;
-import update.Updatable;
-import openfl.Lib;
-import openfl.events.MouseEvent;
-import openfl.display.Sprite;
 import Axis2D;
-
-class AxisMapper<TIn:Axis<TIn>, TOut:Axis<TOut>> implements GameAxes<TOut> {
-    var axesMapping:AVector<TOut, TIn>;
-    var sources:GameAxes<TIn>;
-
-    function new(s) {
-        this.sources = s;
-    }
-
-    public function withMapped(from:TIn, to:TOut) {
-        if (axesMapping[to] != -1)
-            throw "Already has mapping for " + to;
-        axesMapping[to] = from;
-        return this;
-    }
-
-    public function getDirProjection(axis:TOut):Float {
-        var trgAxis = axesMapping[axis];
-        if (trgAxis != -1)
-            return sources.getDirProjection(trgAxis);
-        return 0.;
-    }
-
-    public static function empty<TIn:Axis<TIn>, TOut:Axis<TOut>>(s:GameAxes<TIn>, numOutAxes:Int):AxisMapper<TIn, TOut> {
-        var am = new AxisMapper<TIn, TOut>(s);
-        am.axesMapping = AVConstructor.factoryCreate(TOut, _ -> cast -1, numOutAxes);
-        return am;
-    }
-
-    public static function fromMapping<TIn:Axis<TIn>, TOut:Axis<TOut>>(s:GameAxes<TIn>, mapping:AVector<TOut, TIn>):AxisMapper<TIn, TOut> {
-        var am = new AxisMapper<TIn, TOut>(s);
-        am.axesMapping = mapping;
-        return am;
-    }
-}
+import haxe.ds.Vector;
+import macros.AVConstructor;
+import update.Updatable;
+import utils.Signal;
 
 class OnScreenStick implements GameAxes<Axis2D> implements AxisDispatcher<Axis2D> {
     public var origin:Vector2D<Float> = new Vector2D();
@@ -92,50 +54,8 @@ class OnScreenStick implements GameAxes<Axis2D> implements AxisDispatcher<Axis2D
     }
 }
 
-class DummyOflStickRenderer extends Sprite implements Updatable {
-    var stick:OnScreenStick;
 
-    public function new(s) {
-        super();
-        this.stick = s;
-    }
 
-    public function update(dt) {
-        graphics.clear();
-        if (!stick.active)
-            return;
-        graphics.beginFill(0xffffff, 0.3);
-        graphics.drawCircle(stick.origin.x, stick.origin.y, stick.r);
-        graphics.endFill();
-        graphics.beginFill(0x202020, 0.6);
-        graphics.drawCircle(stick.origin.x + stick.pos.x, stick.origin.y + stick.pos.y, 5);
-        graphics.endFill();
-    }
-}
-
-class DummyOflStickAdapter<T:Axis<T>> implements Updatable {
-    var stick:OnScreenStick;
-
-    public function new(s) {
-        this.stick = s;
-        Lib.current.stage.addEventListener(MouseEvent.MOUSE_DOWN, onDown);
-        Lib.current.stage.addEventListener(MouseEvent.MOUSE_UP, onUp);
-    }
-
-    function onDown(e:MouseEvent) {
-        stick.onDown(Lib.current.stage.mouseX, Lib.current.stage.mouseY);
-    }
-
-    function onUp(e:MouseEvent) {
-        stick.onUp();
-    }
-
-    public function update(dt) {
-        if (!stick.active)
-            return;
-        stick.setPos(Lib.current.stage.mouseX, Lib.current.stage.mouseY);
-    }
-}
 
 @:forward(get)
 abstract Vector2D<TUnit:Float>(Vector<TUnit>) {

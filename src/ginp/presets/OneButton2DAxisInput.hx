@@ -1,5 +1,6 @@
 package ginp.presets;
 
+import openfl.DummyOflStickAdapter;
 import ginp.OnScreenStick;
 
 class OneButton2DAxisInput  extends GameInput<Axis2D, OneButton> implements GameAxes<Axis2D> implements GameButtons<OneButton> {

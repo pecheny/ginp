@@ -10,8 +10,9 @@
     <window background="#204080" fps="20" width="640" height="160"/>
     <source path="src"/>
 
+    <haxelib name="ginp"/>
     <haxelib name="openfl"/>
-    <haxelib name="taxis"/>
+
     <haxeflag name="-dce" value="full"/>
     <assets path="Assets" include="*"/>
 </project>

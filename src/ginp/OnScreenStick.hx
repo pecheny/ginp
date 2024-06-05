@@ -47,6 +47,7 @@ class AxisMapper<TIn:Axis<TIn>, TOut:Axis<TOut>> implements GameAxes<TOut> {
 class OnScreenStick implements GameAxes<Axis2D> implements AxisDispatcher<Axis2D> {
     public var origin:Vector2D<Float> = new Vector2D();
     public var pos:Vector2D<Float> = new Vector2D();
+    public var onActiveToggle:Signal<Bool->Void> = new Signal();
 
     public var r:Float = 60;
     public var axisMoved:Signal<(Axis2D, Float) -> Void> = new Signal();
@@ -56,6 +57,8 @@ class OnScreenStick implements GameAxes<Axis2D> implements AxisDispatcher<Axis2D
     }
 
     public function setPos(x, y) {
+        if (!active)
+            return;
         pos.init(x, y);
         pos.remove(origin);
         if (pos.lenSq() > r * r)
@@ -78,12 +81,14 @@ class OnScreenStick implements GameAxes<Axis2D> implements AxisDispatcher<Axis2D
         setOrigin(mouseX, mouseY);
         setPos(mouseX, mouseY);
         active = true;
+        onActiveToggle.dispatch(active);
     }
 
     public function onUp() {
         setOrigin(0, 0);
         setPos(0, 0);
         active = false;
+        onActiveToggle.dispatch(active);
     }
 }
 

@@ -1,5 +1,5 @@
 {
-	"folders": [
+    "folders": [
         {
             "path": "."
         },
@@ -14,7 +14,7 @@
         }
     ],
     "settings": {
-
-    "workbench.colorTheme": "Sublime Material Theme - Dark",
+        "git.detectSubmodules": false,
+       
     }
 }

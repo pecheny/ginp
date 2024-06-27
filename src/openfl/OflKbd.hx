@@ -1,10 +1,11 @@
 package openfl;
 
+import ginp.api.KbdDispatcher;
 import ginp.api.KbdListener;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 
-class OflKbd {
+class OflKbd implements KbdDispatcher {
     var listeners:Array<KbdListener> = [];
 
     public function new() {
@@ -36,7 +37,25 @@ class OflKbd {
             l.reset();
     }
 
-    public function addListener(l) {
+    public function addListener(l):Void {
         listeners.push(l);
     }
+
+    public function removeListener(l):Void {
+        listeners.remove(l);
+    }
+
+    #if slec
+    public function bind(e:ec.Entity) {
+        var l = e.getComponent(KbdListener);
+        if (l != null)
+            addListener(l);
+    }
+
+    public function unbind(e:ec.Entity) {
+        var l = e.getComponent(KbdListener);
+        if (l != null)
+            removeListener(l);
+    }
+    #end
 }

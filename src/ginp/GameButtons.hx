@@ -51,6 +51,13 @@ class GameButtonsImpl<T:Axis<T>> implements GameButtonsListener<T> implements Ga
     public function afterUpdate() {
         frameDone();
     }
+
+    #if slec
+    public function bind(e:ec.Entity) {
+        e.addComponentByType(GameInputUpdater, this);
+        new ec.CtxWatcher(GameInputUpdaterBinder, e);
+    }
+    #end
 }
 
 interface GameButtons<T:Axis<T>> {

@@ -1,5 +1,6 @@
 package ginp;
 
+import ginp.GameInput.GameInputUpdater;
 import macros.AVConstructor;
 
 /**
@@ -8,7 +9,7 @@ import macros.AVConstructor;
     Useful to combine several event sources (i.e. keyboard, gamepad, touchscreen and so on).
     Each source should not call ```onButtonDown(b)``` second time before ```onButtonUp(b)``` for given ```b```.
 **/
-class GameButtonsImpl<T:Axis<T>> implements GameButtonsListener<T> implements GameButtons<T> {
+class GameButtonsImpl<T:Axis<T>> implements GameButtonsListener<T> implements GameButtons<T> implements GameInputUpdater {
     var states:AVector<T, Int>;
     var statesPrev:AVector<T, Int>;
 
@@ -43,6 +44,12 @@ class GameButtonsImpl<T:Axis<T>> implements GameButtonsListener<T> implements Ga
             states[b] = 0;
             statesPrev[b] = 0;
         }
+    }
+
+    public function beforeUpdate(dt:Float) {}
+
+    public function afterUpdate() {
+        frameDone();
     }
 }
 

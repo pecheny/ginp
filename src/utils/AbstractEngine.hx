@@ -5,6 +5,7 @@ import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.Lib;
 import update.Updatable;
+import update.Updater;
 class AbstractEngine extends Sprite implements Updater {
     var last:Float = 0;
     var timeMultiplier:Float = 1;

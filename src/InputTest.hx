@@ -3,7 +3,7 @@ package;
 import openfl.DummyOflStickAdapter;
 import openfl.DummyOflStickRenderer;
 import ginp.AxisToButton;
-import ginp.GameAxes;
+import ginp.axes.GameAxes;
 import ginp.GameButtons;
 import ginp.GameInput;
 import ginp.Keyboard;

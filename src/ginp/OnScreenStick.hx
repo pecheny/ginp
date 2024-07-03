@@ -1,7 +1,8 @@
 package ginp;
 
-import hxmath.math.MathUtil;
 import Axis2D;
+import ginp.axes.GameAxes;
+import hxmath.math.MathUtil;
 import hxmath.math.Vector2;
 import utils.Signal;
 

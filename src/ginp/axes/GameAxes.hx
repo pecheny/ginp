@@ -1,4 +1,4 @@
-package ginp;
+package ginp.axes;
 
 import ginp.api.KbdListener;
 import haxe.ds.Vector;

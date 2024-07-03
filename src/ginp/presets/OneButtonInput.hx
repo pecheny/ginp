@@ -1,4 +1,5 @@
 package ginp.presets;
+import ginp.axes.GameAxes;
 
 class OneButtonInput  extends GameInput<NullAxis, OneButton> implements GameAxes<NullAxis> implements GameButtons<OneButton> {
     public var onScreenStick(default, null):OnScreenStick;

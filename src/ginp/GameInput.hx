@@ -1,6 +1,7 @@
 package ginp;
 
-import ginp.GameAxes;
+import ginp.axes.GameAxes;
+import ginp.axes.AxisMapper;
 import ginp.GameButtons;
 import ginp.GameKeys;
 import ginp.OnScreenStick;

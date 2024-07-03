@@ -1,4 +1,4 @@
-package ginp;
+package ginp.axes;
 
 import utils.Signal;
 import macros.AVConstructor;

@@ -55,7 +55,7 @@ class GameButtonsImpl<T:Axis<T>> implements GameButtonsListener<T> implements Ga
     #if slec
     public function bind(e:ec.Entity) {
         e.addComponentByType(GameInputUpdater, this);
-        new ec.CtxWatcher(GameInputUpdaterBinder, e);
+        new ec.CtxWatcher(ginp.api.GameInputUpdaterBinder, e);
     }
     #end
 }

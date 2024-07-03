@@ -1,4 +1,4 @@
-package ginp;
+package ginp.api;
  
 #if slec
 import ec.CtxWatcher.CtxBinder;

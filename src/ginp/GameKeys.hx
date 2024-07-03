@@ -4,7 +4,9 @@ import ginp.api.KbdListener;
 import ginp.GameButtons.GameButtonsListener;
 
 typedef KeyMapping<GButton:Axis<GButton>> = Map<KeyCode, GButton>;
-
+/**
+    Translates keyboard events with keycodes to game buttons events according to given mapping.
+**/
 class GameKeys<T:Axis<T>> implements KbdListener {
     var mapping:KeyMapping<T>;
     var target:GameButtonsListener<T>;

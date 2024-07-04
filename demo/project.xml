@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+
+    <meta title="Sample" package="ginp.InputTest" version="1.0.0" company="shoo"/>
+    <app main="InputTest" />
+
+    <window antialiasing="4"/>
+    <window background="#204080" fps="20" width="640" height="160"/>
+    <source path="src"/>
+
+    <haxelib name="ginp"/>
+    <haxelib name="openfl"/>
+
+</project>

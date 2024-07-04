@@ -1,16 +1,24 @@
 {
     "folders": [
         {
+            "name": "demo",
+            "path": "demo"
+        },
+        {
+            "name": "ginp",
             "path": "."
         },
         {
-            "path": "..\\..\\Devs\\openfl"
+            "name": "openfl",
+            "path": "../../Devs/openfl"
         },
         {
-            "path": "..\\..\\Devs\\lime"
+            "name": "lime",
+            "path": "../../Devs/lime"
         },
         {
-            "path": "..\\taxis"
+            "name": "taxis",
+            "path": "../taxis"
         }
     ],
     "settings": {

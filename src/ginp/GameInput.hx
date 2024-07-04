@@ -62,6 +62,7 @@ class GameInput<TAxis:Axis<TAxis>, TButton:Axis<TButton>> implements GameInputUp
 
     public function addFakeAxis(keys):FakeAxis<TAxis> {
         var faxes = new FakeAxis(keys, axisCount);
+        addAxisSource(faxes);
         return faxes;
     }
 

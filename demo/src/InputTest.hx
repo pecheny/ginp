@@ -50,7 +50,6 @@ class InputTest extends AbstractEngine {
         var faxes = input.addFakeAxis([Keyboard.J, Keyboard.L, Keyboard.K, Keyboard.I,]);
         oflkbd.addListener(faxes);
 
-        input.addAxisSource(faxes);
 
         var stick = new OnScreenStick(60);
         var adapter = new DummyOflStickAdapter(stick);

@@ -1,7 +1,7 @@
 package ginp;
 
+import ginp.api.GameButtonsListener;
 import ginp.api.KbdListener;
-import ginp.GameButtons.GameButtonsListener;
 
 typedef KeyMapping<GButton:Axis<GButton>> = Map<KeyCode, GButton>;
 /**

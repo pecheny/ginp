@@ -4,6 +4,7 @@ import ginp.GameButtons;
 import ginp.GameKeys;
 import ginp.OnScreenStick;
 import ginp.api.GameButtons;
+import ginp.api.GameButtonsListener;
 import ginp.api.GameInputUpdater;
 import ginp.api.KbdListener;
 import ginp.axes.AxisMapper;

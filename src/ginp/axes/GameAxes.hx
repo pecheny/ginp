@@ -3,7 +3,6 @@ package ginp.axes;
 import ginp.api.KbdListener;
 import haxe.ds.Vector;
 import haxe.ds.ReadOnlyArray;
-import ginp.GameButtons.GameButtonsListener;
 
 interface GameAxes<T:Axis<T>> {
     function getDirProjection(axis:T):Float;

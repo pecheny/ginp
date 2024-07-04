@@ -45,7 +45,7 @@ class GameInput<TAxis:Axis<TAxis>, TButton:Axis<TButton>> implements GameInputUp
     }
 
     public function afterUpdate() {
-        _buttons.frameDone();
+        _buttons.afterUpdate();
     }
 
     function get_buttons():GameButtons<TButton> {

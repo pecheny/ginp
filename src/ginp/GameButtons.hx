@@ -26,7 +26,7 @@ class GameButtonsImpl<T:Axis<T>> implements GameButtonsListener<T> implements Ga
         return states[button] > 0;
     }
 
-    public function frameDone() {
+    function frameDone() {
         for (b in states.axes())
             statesPrev[b] = states[b];
     }
@@ -67,8 +67,6 @@ interface GameButtons<T:Axis<T>> {
 }
 
 interface GameButtonsListener<T:Axis<T>> {
-    public function frameDone():Void;
-
     public function reset():Void;
 
     public function onButtonUp(b:T):Void;

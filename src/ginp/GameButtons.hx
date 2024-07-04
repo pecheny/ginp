@@ -1,7 +1,7 @@
 package ginp;
 
-import ginp.GameInput.GameInputUpdater;
 import ginp.api.GameButtons;
+import ginp.api.GameInputUpdater;
 import macros.AVConstructor;
 
 /**

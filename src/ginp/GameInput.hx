@@ -4,15 +4,12 @@ import ginp.GameButtons;
 import ginp.GameKeys;
 import ginp.OnScreenStick;
 import ginp.api.GameButtons;
+import ginp.api.GameInputUpdater;
 import ginp.api.KbdListener;
 import ginp.axes.AxisMapper;
 import ginp.axes.GameAxes;
 import update.Updatable;
 
-interface GameInputUpdater {
-    public function beforeUpdate(dt:Float):Void;
-    public function afterUpdate():Void;
-}
 
 class GameInput<TAxis:Axis<TAxis>, TButton:Axis<TButton>> implements GameInputUpdater {
     var _buttons:GameButtonsImpl<TButton>;

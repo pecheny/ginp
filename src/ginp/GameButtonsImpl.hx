@@ -1,6 +1,7 @@
 package ginp;
 
 import ginp.api.GameButtons;
+import ginp.api.GameButtonsListener;
 import ginp.api.GameInputUpdater;
 import macros.AVConstructor;
 
@@ -59,12 +60,4 @@ class GameButtonsImpl<T:Axis<T>> implements GameButtonsListener<T> implements Ga
         new ec.CtxWatcher(ginp.api.GameInputUpdaterBinder, e);
     }
     #end
-}
-
-interface GameButtonsListener<T:Axis<T>> {
-    public function reset():Void;
-
-    public function onButtonUp(b:T):Void;
-
-    public function onButtonDown(b:T):Void;
 }

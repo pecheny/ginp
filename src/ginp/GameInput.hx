@@ -1,6 +1,6 @@
 package ginp;
 
-import ginp.GameButtons;
+import ginp.GameButtonsImpl;
 import ginp.GameKeys;
 import ginp.OnScreenStick;
 import ginp.api.GameButtons;

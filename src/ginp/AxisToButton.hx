@@ -2,6 +2,7 @@ package ginp;
 
 import macros.AVConstructor;
 import ginp.GameButtons.GameButtonsListener;
+import ginp.api.AxisDispatcher;
 
 @:generic
 class AxisToButton<T:Axis<T>, TB:Axis<TB>> {

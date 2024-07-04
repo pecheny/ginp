@@ -1,4 +1,4 @@
-package ginp;
+package ginp.api;
 
 import utils.Signal;
 

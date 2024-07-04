@@ -1,16 +1,17 @@
 package;
 
-import openfl.DummyOflStickAdapter;
-import openfl.DummyOflStickRenderer;
 import ginp.AxisToButton;
-import ginp.axes.GameAxes;
 import ginp.GameButtons;
 import ginp.GameInput;
 import ginp.Keyboard;
 import ginp.OnScreenStick;
+import ginp.axes.GameAxes;
+import openfl.DummyOflStickAdapter;
+import openfl.DummyOflStickRenderer;
+import openfl.OflKbd;
 import openfl.display.Sprite;
-import utils.AbstractEngine;
 import update.Updatable;
+import utils.AbstractEngine;
 
 @:build(macros.BuildMacro.buildAxes())
 @:enum abstract TGAxis(Axis<TGAxis>) to Axis<TGAxis> {
@@ -30,11 +31,13 @@ class InputTest extends AbstractEngine {
 
     public function new() {
         super();
+        var oflkbd = new OflKbd();
         var wnd = openfl.Lib.application.window;
         if (wnd.y < 0)
             wnd.y = 20;
         input = new GameInput(TGAxis.aliases.length, TGButts.aliases.length);
-        input.createKeyMapping([
+        
+        var k = input.createKeyMapping([
             Keyboard.A => TGButts.l,
             Keyboard.D => TGButts.r,
             Keyboard.SPACE => TGButts.jump,
@@ -43,7 +46,9 @@ class InputTest extends AbstractEngine {
             Keyboard.UP => TGButts.jump,
         ]);
 
+        oflkbd.addListener(k);
         var faxes = input.addFakeAxis([Keyboard.J, Keyboard.L, Keyboard.K, Keyboard.I,]);
+        oflkbd.addListener(faxes);
 
         input.addAxisSource(faxes);
 

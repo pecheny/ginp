@@ -1,12 +1,12 @@
 package ginp;
 
+import ginp.api.KbdListener;
 import ginp.axes.GameAxes;
 import ginp.axes.AxisMapper;
 import ginp.GameButtons;
 import ginp.GameKeys;
 import ginp.OnScreenStick;
 import ginp.api.KbdListener.KeyCode;
-import openfl.OflKbd;
 import update.Updatable;
 
 interface GameInputUpdater {
@@ -27,16 +27,14 @@ class GameInput<TAxis:Axis<TAxis>, TButton:Axis<TButton>> implements GameInputUp
 
     var updateBefore:Array<Updatable> = [];
 
-    var oflkbd = new OflKbd();
 
     public function new(axisCount, buttonsCount) {
         _buttons = new GameButtonsImpl(buttonsCount);
         this.axisCount = axisCount;
     }
 
-    public function createKeyMapping(map:Map<KeyCode, TButton>) {
-        var k = new GameKeys(_buttons, map);
-        oflkbd.addListener(k);
+    public function createKeyMapping(map:Map<KeyCode, TButton>):KbdListener {
+        return new GameKeys(_buttons, map);
     }
 
     public function beforeUpdate(dt) {
@@ -66,7 +64,6 @@ class GameInput<TAxis:Axis<TAxis>, TButton:Axis<TButton>> implements GameInputUp
 
     public function addFakeAxis(keys):FakeAxis<TAxis> {
         var faxes = new FakeAxis(keys, axisCount);
-        oflkbd.addListener(faxes);
         return faxes;
     }
 

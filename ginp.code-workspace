@@ -22,6 +22,7 @@
         }
     ],
     "settings": {
+        "window.title": "GINP . . . . . . ${dirty}${activeEditorShort} ",
         "git.detectSubmodules": false,
        
     }

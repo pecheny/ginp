@@ -1,7 +1,7 @@
 package;
 
 import ginp.AxisToButton;
-import ginp.GameButtons;
+import ginp.api.GameButtons;
 import ginp.GameInput;
 import ginp.Keyboard;
 import ginp.OnScreenStick;

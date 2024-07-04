@@ -1,12 +1,12 @@
 package ginp;
 
-import ginp.api.KbdListener;
-import ginp.axes.GameAxes;
-import ginp.axes.AxisMapper;
 import ginp.GameButtons;
 import ginp.GameKeys;
 import ginp.OnScreenStick;
-import ginp.api.KbdListener.KeyCode;
+import ginp.api.GameButtons;
+import ginp.api.KbdListener;
+import ginp.axes.AxisMapper;
+import ginp.axes.GameAxes;
 import update.Updatable;
 
 interface GameInputUpdater {

@@ -1,4 +1,5 @@
 package ginp.presets;
+import ginp.api.GameButtons;
 import ginp.axes.GameAxes;
 
 class OneButtonInput  extends GameInput<NullAxis, OneButton> implements GameAxes<NullAxis> implements GameButtons<OneButton> {

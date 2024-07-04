@@ -1,6 +1,7 @@
 package ginp;
 
 import ginp.GameInput.GameInputUpdater;
+import ginp.api.GameButtons;
 import macros.AVConstructor;
 
 /**
@@ -58,12 +59,6 @@ class GameButtonsImpl<T:Axis<T>> implements GameButtonsListener<T> implements Ga
         new ec.CtxWatcher(ginp.api.GameInputUpdaterBinder, e);
     }
     #end
-}
-
-interface GameButtons<T:Axis<T>> {
-    public function justPressed(button:T):Bool;
-
-    public function pressed(button:T):Bool;
 }
 
 interface GameButtonsListener<T:Axis<T>> {

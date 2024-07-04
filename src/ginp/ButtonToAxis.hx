@@ -1,6 +1,7 @@
 package ginp;
 
 import ginp.api.GameAxis;
+import ginp.api.GameButtons;
 class ButtonToAxis<TB:Axis<TB>, T:Axis<T>> {
     var buttons:GameButtons<TB>;
     var pb:TB;

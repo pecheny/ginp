@@ -31,12 +31,15 @@ class GameAxesSummator<T:Axis<T>> implements GameAxes<T> {
     Gamepad axes emulation with keyboard. THe first arg is array of keys 
     which are pairs for negative-positive directions of each axis.
 **/
-class FakeAxis<T:Axis<T>> implements GameAxes<T> implements KbdListener {
-    // var mapping:KeyMapping<T>;
+class FakeAxis<T:Axis<T>> implements GameAxes<T> extends FakeAxisImpl {
+    public function getDirProjection(axis:T):Float {
+        return getVal(axis);
+    }
+}
+
+class FakeAxisImpl implements KbdListener {
     var keys:ReadOnlyArray<KeyCode>;
     var states:Vector<Bool>;
-
-    // var states:Map<KeyCode, Bool> = new Map();
 
     public function new(keys:ReadOnlyArray<KeyCode>, n) {
         this.keys = keys;
@@ -66,7 +69,7 @@ class FakeAxis<T:Axis<T>> implements GameAxes<T> implements KbdListener {
             states[i] = false;
     }
 
-    public function getDirProjection(axis:T):Float {
+    public function getVal(axis:Int):Float {
         var keyOffset:Int = axis * 2;
         var val = 0;
         if (states[keyOffset])

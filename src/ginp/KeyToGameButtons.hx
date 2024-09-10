@@ -2,7 +2,6 @@ package ginp;
 
 import ginp.api.KbdDispatcher;
 import ginp.api.KbdListener;
-import ginp.GameButtons.GameButtonsImpl;
 
 class KeyToGameButtons<T:Axis<T>> extends GameButtonsImpl<T> {
     var map:Map<Int, T> = new Map();

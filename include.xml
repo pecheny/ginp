@@ -5,10 +5,6 @@
     <haxelib name="hxmath"/>
     <haxelib name="taxis"/>
 
-    <haxedef name = "openfl_disable_context_cache" value = "true" />
-    <haxedef name = "openfl_always_render" value = "true" />
-    <haxeflag name="-D" value="no-deprecation-warnings" />
-
 
     <assets path="Assets" include="*"/>
 

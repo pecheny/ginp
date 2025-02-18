@@ -15,7 +15,7 @@ import macros.AVConstructor;
 class GameButtonsImpl<T:Axis<T>> implements GameButtonsListener<T> implements GameButtons<T> implements GameInputUpdater implements GameButtonsDispatcher<T> {
     var states:AVector<T, Int>;
     var statesPrev:AVector<T, Int>;
-    var siblings:Array<GameButtonsListener<T>> = [];
+    var target:GameButtonsListener<T>;
 
     public function new(n:Int) {
         states = AVConstructor.factoryCreate(T, (b:T) -> 0, n);
@@ -37,14 +37,12 @@ class GameButtonsImpl<T:Axis<T>> implements GameButtonsListener<T> implements Ga
 
     public function onButtonUp(b:T) {
         states[b] = Std.int(Math.max(0, states[b] - 1));
-        for (s in siblings)
-            s.onButtonUp(b);
+        target?.onButtonUp(b);
     }
 
     public function onButtonDown(b:T) {
         states[b]++;
-        for (s in siblings)
-            s.onButtonDown(b);
+        target?.onButtonDown(b);
     }
 
     public function reset() {
@@ -60,13 +58,11 @@ class GameButtonsImpl<T:Axis<T>> implements GameButtonsListener<T> implements Ga
         frameDone();
     }
 
-    public function addListener(l:GameButtonsListener<T>):Void{
-        siblings.push(l);
+    public function setListener(l:GameButtonsListener<T>):Void{
+        target?.reset(); // not sure if it is required and would not broke smth
+        target = l;
     }
 
-    public function removeListener(l:GameButtonsListener<T>):Void{
-        siblings.remove(l);
-    }
 
     #if slec
     public function bind(e:ec.Entity) {

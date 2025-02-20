@@ -6,6 +6,10 @@ import ec.Entity;
 import ginp.GameButtonsImpl;
 import ginp.api.GameButtonsDispatcher;
 import ginp.api.GameButtonsListener;
+#if macro
+import haxe.macro.Expr.ExprOf;
+import utils.MacroGenericAliasConverter;
+#end
 
 class ButtonInputBinder<TButtons:Axis<TButtons>> implements CtxBinder {
     var input:GameButtonsListener<TButtons>;
@@ -24,6 +28,18 @@ class ButtonInputBinder<TButtons:Axis<TButtons>> implements CtxBinder {
     public function unbind(e:Entity) {
         var dispatcher:GameButtonsDispatcher<TButtons> = e.getComponentByName(dispatcherAlias);
         dispatcher.setListener(null);
+    }
+    
+    public static macro function addDispatcher<T:Axis<T>>(basis:ExprOf<T>, e:ExprOf<Entity>, dispatcher:ExprOf<GameButtonsDispatcher<T>>) {
+        var basisName = @:privateAccess MacroGenericAliasConverter.checkType(basis);
+        var exprs = [];
+        exprs.push(
+            macro trix.entity.addComponentByName("GameButtonDispatcher_" + $v{basisName}, $dispatcher)
+        );
+        exprs.push(
+            macro new CtxWatcherBase("ButtonInputBinder_" + $v{basisName}, $e)
+        );
+        return macro $b{exprs};
     }
 }
 #end

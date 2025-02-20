@@ -1,9 +1,10 @@
 package ginp;
 
+import ginp.api.GameButtonsDispatcher;
 import ginp.api.GameButtonsListener;
 
 
-class ButtonsMapper<TIn:Axis<TIn>, TOut:Axis<TOut>> implements GameButtonsListener<TIn>{
+class ButtonsMapper<TIn:Axis<TIn>, TOut:Axis<TOut>> implements GameButtonsListener<TIn> implements GameButtonsDispatcher<TOut>{
     var mapping:Map<TIn,TOut>;
     var target:GameButtonsListener<TOut>;
 
@@ -33,5 +34,9 @@ class ButtonsMapper<TIn:Axis<TIn>, TOut:Axis<TOut>> implements GameButtonsListen
 
     public function reset() {
         target.reset();
+    }
+
+    public function setListener(l:GameButtonsListener<TOut>) {
+        this.target = l;
     }
 }

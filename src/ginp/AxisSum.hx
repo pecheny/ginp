@@ -8,6 +8,10 @@ class AxisSum {
     public function addAxis(a) {
         children.push(a);
     }
+    
+    public function removeAxis(a) {
+        children.remove(a);
+    }
 
     public function getDirProjection():Float {
         var val = 0.;

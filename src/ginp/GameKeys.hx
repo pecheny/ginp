@@ -1,13 +1,15 @@
 package ginp;
 
+import ginp.api.GameButtonsDispatcher;
 import ginp.api.GameButtonsListener;
 import ginp.api.KbdListener;
 
 typedef KeyMapping<GButton:Axis<GButton>> = Map<KeyCode, GButton>;
+
 /**
     Translates keyboard events with keycodes to game buttons events according to given mapping.
 **/
-class GameKeys<T:Axis<T>> implements KbdListener {
+class GameKeys<T:Axis<T>> implements KbdListener implements GameButtonsDispatcher<T> {
     var mapping:KeyMapping<T>;
     var target:GameButtonsListener<T>;
     var states:Map<KeyCode, Bool> = new Map();
@@ -28,7 +30,7 @@ class GameKeys<T:Axis<T>> implements KbdListener {
         if (states[kc])
             return;
         states[kc] = true;
-        target.onButtonDown(bt);
+        target?.onButtonDown(bt);
     }
 
     public function keyUpListener(kc:KeyCode):Void {
@@ -36,12 +38,16 @@ class GameKeys<T:Axis<T>> implements KbdListener {
         if (bt == null)
             return;
         states[kc] = false;
-        target.onButtonUp(bt);
+        target?.onButtonUp(bt);
     }
 
     public function reset() {
         for (key in mapping.keys())
             states[key] = false;
-        target.reset();
+        target?.reset();
+    }
+
+    public function setListener(l:GameButtonsListener<T>) {
+        target = l;
     }
 }

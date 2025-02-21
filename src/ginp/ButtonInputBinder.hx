@@ -34,7 +34,7 @@ class ButtonInputBinder<TButtons:Axis<TButtons>> implements CtxBinder {
         var basisName = @:privateAccess MacroGenericAliasConverter.checkType(basis);
         var exprs = [];
         exprs.push(
-            macro trix.entity.addComponentByName("GameButtonDispatcher_" + $v{basisName}, $dispatcher)
+            macro $e.addComponentByName("GameButtonDispatcher_" + $v{basisName}, $dispatcher)
         );
         exprs.push(
             macro new CtxWatcherBase("ButtonInputBinder_" + $v{basisName}, $e)

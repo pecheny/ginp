@@ -1,22 +1,23 @@
 package ginp;
 
+import ginp.api.GameButtonsDispatcher;
 import ginp.api.AxisDispatcher;
 import ginp.api.GameButtonsListener;
 import macros.AVConstructor;
 
 @:generic
-class AxisToButton<T:Axis<T>, TB:Axis<TB>> {
+class AxisToButton<T:Axis<T>, TB:Axis<TB>> implements GameButtonsDispatcher<TB> {
     var target:GameButtonsListener<TB>;
     var source:AxisDispatcher<T>;
     // var mappers:Map<T, Array<AxisToButtonMapper>> = new Map();
     var mappers:AVector<T, Array<AxisToButtonMapper<TB>>>;
 
-    public function new(numAxes, source, target) {
+    public function new(numAxes, source, target = null) {
         mappers = AVConstructor.factoryCreate(T, _ -> [], numAxes);
         this.target = target;
         this.source = source;
         onMove(cast 0, 0);
-        source.axisMoved.listen( (a,b) -> this.onMove(a,b));
+        source.axisMoved.listen((a, b) -> this.onMove(a, b));
     }
 
     public function withMapped(to:TB, axis:T, dir:Int) {
@@ -32,11 +33,15 @@ class AxisToButton<T:Axis<T>, TB:Axis<TB>> {
     function onMove(a:T, val:Float) {
         for (mp in mappers[a]) {
             if (mp.justPressed(val))
-                target.onButtonDown(mp.targButton);
+                target?.onButtonDown(mp.targButton);
             if (mp.justReleased(val))
-                target.onButtonUp(mp.targButton);
+                target?.onButtonUp(mp.targButton);
             mp.last = val;
         }
+    }
+
+    public function setListener(l:GameButtonsListener<TB>) {
+        target = l;
     }
 }
 

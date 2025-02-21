@@ -1,13 +1,9 @@
 package ginp.axes;
 
-import utils.Signal;
-import macros.AVConstructor;
-import haxe.ds.Vector;
-import update.Updatable;
-import openfl.Lib;
-import openfl.events.MouseEvent;
-import openfl.display.Sprite;
 import Axis2D;
+import haxe.ds.Vector;
+import macros.AVConstructor;
+import update.Updatable;
 
 class AxisMapper<TIn:Axis<TIn>, TOut:Axis<TOut>> implements GameAxes<TOut> {
     var axesMapping:AVector<TOut, TIn>;

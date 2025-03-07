@@ -37,7 +37,7 @@ class ButtonInputBinder<TButtons:Axis<TButtons>> implements CtxBinder {
             macro $e.addComponentByName("GameButtonDispatcher_" + $v{basisName}, $dispatcher)
         );
         exprs.push(
-            macro new CtxWatcherBase("ButtonInputBinder_" + $v{basisName}, $e)
+            macro new ec.CtxWatcher.CtxWatcherBase("ButtonInputBinder_" + $v{basisName}, $e)
         );
         return macro $b{exprs};
     }

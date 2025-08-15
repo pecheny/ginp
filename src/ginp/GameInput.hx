@@ -11,7 +11,6 @@ import ginp.axes.AxisMapper;
 import ginp.axes.GameAxes;
 import update.Updatable;
 
-
 class GameInput<TAxis:Axis<TAxis>, TButton:Axis<TButton>> implements GameInputUpdater {
     var _buttons:GameButtonsImpl<TButton>;
 
@@ -25,14 +24,15 @@ class GameInput<TAxis:Axis<TAxis>, TButton:Axis<TButton>> implements GameInputUp
 
     var updateBefore:Array<Updatable> = [];
 
-
     public function new(axisCount, buttonsCount) {
         _buttons = new GameButtonsImpl(buttonsCount);
         this.axisCount = axisCount;
     }
 
     public function createKeyMapping(map:Map<KeyCode, TButton>):KbdListener {
-        return new GameKeys(_buttons, map);
+        var gk = new GameKeys(map);
+        gk.addListener(_buttons);
+        return gk;
     }
 
     public function beforeUpdate(dt) {

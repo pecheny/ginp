@@ -7,14 +7,15 @@ import macros.AVConstructor;
 
 @:generic
 class AxisToButton<T:Axis<T>, TB:Axis<TB>> implements GameButtonsDispatcher<TB> {
-    var target:GameButtonsListener<TB>;
+    var targets:GameButtonsListeners<TB> = new GameButtonsListeners();
+    var cache:PressCache<TB> = new PressCache();
     var source:AxisDispatcher<T>;
-    // var mappers:Map<T, Array<AxisToButtonMapper>> = new Map();
     var mappers:AVector<T, Array<AxisToButtonMapper<TB>>>;
+    var numAxes:Int;
 
-    public function new(numAxes, source, target = null) {
+    public function new(numAxes, source) {
+        this.numAxes = numAxes;
         mappers = AVConstructor.factoryCreate(T, _ -> [], numAxes);
-        this.target = target;
         this.source = source;
         onMove(cast 0, 0);
         source.axisMoved.listen((a, b) -> this.onMove(a, b));
@@ -32,16 +33,26 @@ class AxisToButton<T:Axis<T>, TB:Axis<TB>> implements GameButtonsDispatcher<TB> 
 
     function onMove(a:T, val:Float) {
         for (mp in mappers[a]) {
-            if (mp.justPressed(val))
-                target?.onButtonDown(mp.targButton);
-            if (mp.justReleased(val))
-                target?.onButtonUp(mp.targButton);
+            if (mp.justPressed(val)) {
+                targets.onButtonDown(mp.targButton);
+                cache.onButtonDown(mp.targButton);
+            }
+            if (mp.justReleased(val)) {
+                targets.onButtonUp(mp.targButton);
+                cache.onButtonUp(mp.targButton);
+            }
             mp.last = val;
         }
     }
 
-    public function setListener(l:GameButtonsListener<TB>) {
-        target = l;
+    public function addListener(l:GameButtonsListener<TB>) {
+        targets.push(l);
+        cache.pressAll(l);
+    }
+
+    public function removeListener(l:GameButtonsListener<TB>) {
+        targets.remove(l);
+        cache.releaseAll(l);
     }
 }
 

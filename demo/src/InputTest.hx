@@ -57,7 +57,8 @@ class InputTest extends AbstractEngine {
 
         var mapper = input.mapAxisSource(stick).withMapped(Axis2D.horizontal, TGAxis.h).withMapped(Axis2D.vertical, TGAxis.v);
 
-        var a2b = new AxisToButton<Axis2D, TGButts>(Axis2D.aliases.length, stick, @:privateAccess input._buttons);
+        var a2b = new AxisToButton<Axis2D, TGButts>(Axis2D.aliases.length, stick);
+        a2b.addListener(@:privateAccess input._buttons);
 
         var rend = new DummyOflStickRenderer(stick);
         addUpdatable(rend);
@@ -71,10 +72,10 @@ class InputTest extends AbstractEngine {
 
         y += 40;
         x = 20;
-        createAxisView(faxes, TGAxis.h, x, y += 40);
         createAxisView(faxes, TGAxis.v, x, y += 40);
-
+        
         y -= 80;
+        createAxisView(faxes, TGAxis.h, x, y += 40);
         x += 140;
 
         createAxisView(mapper, TGAxis.h, x, y += 40);

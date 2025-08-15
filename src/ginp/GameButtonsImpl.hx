@@ -15,7 +15,9 @@ import macros.AVConstructor;
 class GameButtonsImpl<T:Axis<T>> implements GameButtonsListener<T> implements GameButtons<T> implements GameInputUpdater implements GameButtonsDispatcher<T> {
     var states:AVector<T, Int>;
     var statesPrev:AVector<T, Int>;
-    var target:GameButtonsListener<T>;
+    // var target:GameButtonsListener<T>;
+    var targets:GameButtonsListeners<T> = new GameButtonsListeners();
+    var cache:PressCache<T> = new PressCache();
 
     public function new(n:Int) {
         states = AVConstructor.factoryCreate(T, (b:T) -> 0, n);
@@ -37,12 +39,14 @@ class GameButtonsImpl<T:Axis<T>> implements GameButtonsListener<T> implements Ga
 
     public function onButtonUp(b:T) {
         states[b] = Std.int(Math.max(0, states[b] - 1));
-        target?.onButtonUp(b);
+        targets.onButtonUp(b);
+        cache.onButtonUp(b);
     }
 
     public function onButtonDown(b:T) {
         states[b]++;
-        target?.onButtonDown(b);
+        targets.onButtonDown(b);
+        cache.onButtonDown(b);
     }
 
     public function reset() {
@@ -50,6 +54,8 @@ class GameButtonsImpl<T:Axis<T>> implements GameButtonsListener<T> implements Ga
             states[b] = 0;
             statesPrev[b] = 0;
         }
+        targets.reset(cache);
+        cache.reset();
     }
 
     public function beforeUpdate(dt:Float) {}
@@ -58,9 +64,14 @@ class GameButtonsImpl<T:Axis<T>> implements GameButtonsListener<T> implements Ga
         frameDone();
     }
 
-    public function setListener(l:GameButtonsListener<T>):Void{
-        target?.reset(); // not sure if it is required and would not broke smth
-        target = l;
+    public function addListener(l:GameButtonsListener<T>) {
+        targets.push(l);
+        cache.pressAll(l);
+    }
+
+    public function removeListener(l:GameButtonsListener<T>) {
+        targets.remove(l);
+        cache.releaseAll(l);
     }
 
 

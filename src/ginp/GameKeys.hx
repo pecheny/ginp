@@ -11,12 +11,12 @@ typedef KeyMapping<GButton:Axis<GButton>> = Map<KeyCode, GButton>;
 **/
 class GameKeys<T:Axis<T>> implements KbdListener implements GameButtonsDispatcher<T> {
     var mapping:KeyMapping<T>;
-    var target:GameButtonsListener<T>;
+    var targets:GameButtonsListeners<T> = new GameButtonsListeners();
+    var cache:PressCache<T> = new PressCache();
     var states:Map<KeyCode, Bool> = new Map();
 
-    public function new(t, ?m) {
+    public function new(?m) {
         this.mapping = m != null ? m : new Map();
-        this.target = t;
     }
 
     public function withMapped(key:KeyCode, butt:T) {
@@ -30,7 +30,8 @@ class GameKeys<T:Axis<T>> implements KbdListener implements GameButtonsDispatche
         if (states[kc])
             return;
         states[kc] = true;
-        target?.onButtonDown(bt);
+        targets.onButtonDown(bt);
+        cache.onButtonDown(bt);
     }
 
     public function keyUpListener(kc:KeyCode):Void {
@@ -38,16 +39,25 @@ class GameKeys<T:Axis<T>> implements KbdListener implements GameButtonsDispatche
         if (bt == null)
             return;
         states[kc] = false;
-        target?.onButtonUp(bt);
+        targets.onButtonUp(bt);
+        cache.onButtonUp(bt);
     }
 
     public function reset() {
         for (key in mapping.keys())
             states[key] = false;
-        target?.reset();
+        targets.reset(cache);
+        cache.reset();
     }
 
-    public function setListener(l:GameButtonsListener<T>) {
-        target = l;
+    public function addListener(l:GameButtonsListener<T>) {
+        targets.push(l);
+        cache.pressAll(l);
     }
+
+    public function removeListener(l:GameButtonsListener<T>) {
+        targets.remove(l);
+        cache.releaseAll(l);
+    }
+
 }

@@ -22,12 +22,12 @@ class ButtonInputBinder<TButtons:Axis<TButtons>> implements CtxBinder {
 
     public function bind(e:Entity) {
         var dispatcher:GameButtonsDispatcher<TButtons> = e.getComponentByName(dispatcherAlias);
-        dispatcher.setListener(input);
+        dispatcher.addListener(input);
     }
 
     public function unbind(e:Entity) {
         var dispatcher:GameButtonsDispatcher<TButtons> = e.getComponentByName(dispatcherAlias);
-        dispatcher.setListener(null);
+        dispatcher.removeListener(input);
     }
     
     public static macro function addDispatcher<T:Axis<T>>(basis:ExprOf<T>, e:ExprOf<Entity>, dispatcher:ExprOf<GameButtonsDispatcher<T>>) {

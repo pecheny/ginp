@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+    <include path="include.xml" />
+    <include path="demo/project.xml" />
+    <haxeflag name="-D" value="message.reporting=classic" />
+
+</project>

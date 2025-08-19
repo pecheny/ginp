@@ -72,10 +72,10 @@ class InputTest extends AbstractEngine {
 
         y += 40;
         x = 20;
+        createAxisView(faxes, TGAxis.h, x, y += 40);
         createAxisView(faxes, TGAxis.v, x, y += 40);
         
         y -= 80;
-        createAxisView(faxes, TGAxis.h, x, y += 40);
         x += 140;
 
         createAxisView(mapper, TGAxis.h, x, y += 40);

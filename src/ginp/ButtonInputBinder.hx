@@ -12,32 +12,32 @@ import utils.MacroGenericAliasConverter;
 #end
 
 class ButtonInputBinder<TButtons:Axis<TButtons>> implements CtxBinder {
-    var input:GameButtonsListener<TButtons>;
-    var dispatcherAlias:String;
+    var dispatcher:GameButtonsDispatcher<TButtons>;
+    var listenerAlias:String;
 
-    public function new(tbuttonAlias:String, input:GameButtonsListener<TButtons>) {
-        this.input = input;
-        dispatcherAlias = "GameButtonDispatcher_" + tbuttonAlias;
+    public function new(tbuttonAlias:String, input:GameButtonsDispatcher<TButtons>) {
+        this.dispatcher = input;
+        listenerAlias = "GameButtonsListener_" + tbuttonAlias;
     }
 
     public function bind(e:Entity) {
-        var dispatcher:GameButtonsDispatcher<TButtons> = e.getComponentByName(dispatcherAlias);
-        dispatcher.addListener(input);
+        var listener:GameButtonsListener<TButtons> = e.getComponentByName(listenerAlias);
+        dispatcher.addListener(listener);
     }
 
     public function unbind(e:Entity) {
-        var dispatcher:GameButtonsDispatcher<TButtons> = e.getComponentByName(dispatcherAlias);
-        dispatcher.removeListener(input);
+        var listener:GameButtonsListener<TButtons> = e.getComponentByName(listenerAlias);
+        dispatcher.removeListener(listener);
     }
     
-    public static macro function addDispatcher<T:Axis<T>>(basis:ExprOf<T>, e:ExprOf<Entity>, dispatcher:ExprOf<GameButtonsDispatcher<T>>) {
+    public static macro function addListener<T:Axis<T>>(basis:ExprOf<T>, e:ExprOf<Entity>, listener:ExprOf<GameButtonsListener<T>>) {
         var basisName = @:privateAccess MacroGenericAliasConverter.checkType(basis);
         var exprs = [];
         exprs.push(
-            macro $e.addComponentByName("GameButtonDispatcher_" + $v{basisName}, $dispatcher)
+            macro $e.addComponentByName("GameButtonsListener_" + $v{basisName}, $listener)
         );
         exprs.push(
-            macro new ec.CtxWatcher.CtxWatcherBase("ButtonInputBinder_" + $v{basisName}, $e)
+            macro new ec.CtxWatcher.CtxWatcherBase("ButtonOutputBinder_" + $v{basisName}, $e)
         );
         return macro $b{exprs};
     }

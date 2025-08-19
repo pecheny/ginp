@@ -12,29 +12,33 @@ import utils.MacroGenericAliasConverter;
 #end
 
 class ButtonOutputBinder<TButtons:Axis<TButtons>> implements CtxBinder {
-    var dispatcher:GameButtonsDispatcher<TButtons>;
-    var listenerAlias:String;
+    public static inline var  DISPATCHER_PREFIX = "GameButtonDispatcher_";
+    var input:GameButtonsListener<TButtons>;
+    var dispatcherAlias:String;
 
-    public function new(tbuttonAlias:String, input:GameButtonsDispatcher<TButtons>) {
-        this.dispatcher = input;
-        listenerAlias = "GameButtonsListener_" + tbuttonAlias;
+    public function new(tbuttonAlias:String, input:GameButtonsListener<TButtons>) {
+        this.input = input;
+        dispatcherAlias = DISPATCHER_PREFIX + tbuttonAlias;
     }
 
     public function bind(e:Entity) {
-        var listener:GameButtonsListener<TButtons> = e.getComponentByName(listenerAlias);
-        dispatcher.addListener(listener);
+        var dispatcher:GameButtonsDispatcher<TButtons> = e.getComponentByName(dispatcherAlias);
+        dispatcher.addListener(input);
     }
 
     public function unbind(e:Entity) {
-        var listener:GameButtonsListener<TButtons> = e.getComponentByName(listenerAlias);
-        dispatcher.removeListener(listener);
+        var dispatcher:GameButtonsDispatcher<TButtons> = e.getComponentByName(dispatcherAlias);
+        dispatcher.removeListener(input);
     }
     
-    public static macro function addListener<T:Axis<T>>(basis:ExprOf<T>, e:ExprOf<Entity>, listener:ExprOf<GameButtonsListener<T>>) {
+    public static macro function addDispatcher<T:Axis<T>>(basis:ExprOf<T>, e:ExprOf<Entity>, dispatcher:ExprOf<GameButtonsDispatcher<T>>) {
         var basisName = @:privateAccess MacroGenericAliasConverter.checkType(basis);
+        // trace(basisName, Context.getLocalClass());
+        // todo try to apply typeparams of localClass to basis.
+        // for now using generic basis in place lead to _T aliases instead of eal type names.
         var exprs = [];
         exprs.push(
-            macro $e.addComponentByName("GameButtonsListener_" + $v{basisName}, $listener)
+            macro $e.addComponentByName(ButtonOutputBinder.DISPATCHER_PREFIX  + $v{basisName}, $dispatcher)
         );
         exprs.push(
             macro new ec.CtxWatcher.CtxWatcherBase("ButtonOutputBinder_" + $v{basisName}, $e)

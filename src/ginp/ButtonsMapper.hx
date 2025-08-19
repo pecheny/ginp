@@ -8,7 +8,7 @@ class ButtonsMapper<TIn:Axis<TIn>, TOut:Axis<TOut>> implements GameButtonsListen
     var targets:GameButtonsListeners<TOut> = new GameButtonsListeners();
     var cache:PressCache<TOut> = new PressCache();
 
-    public function new(t, ?m) {
+    public function new(?m) {
         this.mapping = m != null ? m : new Map();
     }
 

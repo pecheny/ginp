@@ -30,6 +30,21 @@ class ButtonInputBinder<TButtons:Axis<TButtons>> implements CtxBinder {
         dispatcher.removeListener(listener);
     }
     
+    public static macro function addListenerByAlias<T:Axis<T>>(basisNameExpr:ExprOf<String>, e:ExprOf<Entity>, listener:ExprOf<GameButtonsListener<T>>) {
+        var exprs = [];
+        var basisName:String = switch basisNameExpr.expr {
+            case EConst(CIdent(name)): name;
+            case _: throw "Wrong";
+        }
+        exprs.push(
+            macro $e.addComponentByName("GameButtonsListener_" + $i{basisName}, $listener)
+        );
+        exprs.push(
+            macro new ec.CtxWatcher.CtxWatcherBase("ButtonInputBinder_" + $i{basisName}, $e)
+        );
+        return macro $b{exprs};
+    }
+
     public static macro function addListener<T:Axis<T>>(basis:ExprOf<T>, e:ExprOf<Entity>, listener:ExprOf<GameButtonsListener<T>>) {
         var basisName = @:privateAccess MacroGenericAliasConverter.checkType(basis);
         var exprs = [];

@@ -1,5 +1,6 @@
 package openfl;
 
+import ginp.Keyboard;
 import ginp.api.KbdDispatcher;
 import ginp.api.KbdListener;
 import openfl.events.Event;
@@ -7,6 +8,8 @@ import openfl.events.KeyboardEvent;
 
 class OflKbd implements KbdDispatcher {
     var listeners:Array<KbdListener> = [];
+    inline static var APP_CONTROL_BACK = 0x4000010E;
+    public var interceptBack:Bool = true;
 
     public function new() {
         var dispObj = openfl.Lib.current.stage;
@@ -14,17 +17,36 @@ class OflKbd implements KbdDispatcher {
         dispObj.addEventListener(KeyboardEvent.KEY_UP, keyUpListener);
         dispObj.addEventListener(Event.ACTIVATE, activateListener);
         dispObj.addEventListener(Event.DEACTIVATE, deactivateListener);
-        // Application.current.onKeyDown
     }
 
-    function keyDownListener(ev:KeyboardEvent):Void {
+    function keyDownListener(e:KeyboardEvent):Void {
+        #if back_as_esc
+        if (e.keyCode == APP_CONTROL_BACK && interceptBack) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            for (l in listeners)
+                l.keyDownListener(Keyboard.ESCAPE);
+            return;
+        }
+        #end
         for (l in listeners)
-            l.keyDownListener(ev.keyCode);
+            l.keyDownListener(e.keyCode);
     }
 
-    function keyUpListener(ev:KeyboardEvent):Void {
+    function keyUpListener(e:KeyboardEvent):Void {
+        #if back_as_esc
+        if (e.keyCode == APP_CONTROL_BACK && interceptBack) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            e.stopPropagation();
+            for (l in listeners)
+                l.keyUpListener(Keyboard.ESCAPE);
+            return;
+        }
+        #end
         for (l in listeners)
-            l.keyUpListener(ev.keyCode);
+            l.keyUpListener(e.keyCode);
     }
 
     function activateListener(ev:Event):Void {
@@ -59,3 +81,4 @@ class OflKbd implements KbdDispatcher {
     }
     #end
 }
+

@@ -4,8 +4,8 @@ import Axis2D;
 import ginp.axes.GameAxes;
 import hxmath.math.MathUtil;
 import hxmath.math.Vector2;
-import utils.Signal;
 import ginp.api.AxisDispatcher;
+import fu.Signal;
 
 class OnScreenStick implements GameAxes<Axis2D> implements AxisDispatcher<Axis2D> {
     public var origin = new Vector2(0, 0);

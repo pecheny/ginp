@@ -1,6 +1,7 @@
 package ginp.api;
 
-import utils.Signal;
+import fu.Signal;
+
 
 interface AxisDispatcher<T:Axis<T>> {
     var axisMoved:Signal<(T, Float) -> Void>;
